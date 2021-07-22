@@ -1,6 +1,7 @@
 import requests
 import sys
 
+
 class Branch:
     def __init__(self, _name):
         self.name = _name
@@ -37,16 +38,17 @@ class Project:
     def getkey(self):
         return self.key
 
+
+#Page size
 PS = 500
 
+#API's used
 SQ_URL = 'http://localhost:9000/'
-
 PROJECTS_API = 'api/projects/search?qualifiers=TRK&ps='+str(PS)
-
 BRANCHES_LIST_API = 'api/project_branches/list'
-
 NCLOC_API = 'api/measures/component'
 
+#Credentials
 AUTH = ('admin', 'admin2')
 
 try:
@@ -73,7 +75,7 @@ except Exception as e:
     print(e)
     sys.exit(2)
 
-print("There are {} projects in your sSonarQube instance".format(len(components)))
+print("There are {} projects in your SonarQube instance".format(len(components)))
 
 projects = []
 
@@ -103,6 +105,8 @@ for project in projects:
         if branch.getncloc() > biggerncloc:
             biggerncloc = branch.getncloc()
             biggerbranch = branch.getname()
+
+    #printing the biggest branch of the project along with its ncloc
     print(project.getkey(), biggerbranch, biggerncloc)
     totalncloc = totalncloc + biggerncloc
 
