@@ -88,7 +88,7 @@ for component in components:
             B = Branch(str(br['name']))
             P.addbranch(B)
         projects.append(P)
-    except:
+    except ConnectionError as e:
         pass
 
 totalncloc = 0
@@ -100,7 +100,7 @@ for project in projects:
         try:
             ncloc = requests.get(SQ_URL+NCLOC_API+'?component='+project.getkey()+'&branch='+branch.getname()+'&metricKeys=ncloc', auth=AUTH)
             branch.setncloc(ncloc.json()['component']['measures'][0]['value'])
-        except:
+        except ConnectionError as c:
             pass
         if branch.getncloc() > biggerncloc:
             biggerncloc = branch.getncloc()
