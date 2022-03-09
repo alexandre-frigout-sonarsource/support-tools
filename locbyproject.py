@@ -49,7 +49,7 @@ BRANCHES_LIST_API = 'api/project_branches/list'
 NCLOC_API = 'api/measures/component'
 
 #Credentials
-AUTH = ('admin', 'admin2')
+AUTH = ('admin', 'admin1')
 
 try:
     print("Getting projects list...")
@@ -96,19 +96,22 @@ print("Counting the number of lines of code...")
 for project in projects:
     biggerncloc = 0
     biggerbranch = ''
-    for branch in project.getbranches():
-        try:
-            ncloc = requests.get(SQ_URL+NCLOC_API+'?component='+project.getkey()+'&branch='+branch.getname()+'&metricKeys=ncloc', auth=AUTH)
-            branch.setncloc(ncloc.json()['component']['measures'][0]['value'])
-        except ConnectionError as c:
-            pass
-        if branch.getncloc() > biggerncloc:
-            biggerncloc = branch.getncloc()
-            biggerbranch = branch.getname()
+    try:
+        for branch in project.getbranches():
+            try:
+                ncloc = requests.get(SQ_URL+NCLOC_API+'?component='+project.getkey()+'&branch='+branch.getname()+'&metricKeys=ncloc', auth=AUTH)
+                branch.setncloc(ncloc.json()['component']['measures'][0]['value'])
+            except ConnectionError as c:
+                pass
+            if branch.getncloc() > biggerncloc:
+                biggerncloc = branch.getncloc()
+                biggerbranch = branch.getname()
 
-    #printing the biggest branch of the project along with its ncloc
-    print(project.getkey(), biggerbranch, biggerncloc)
-    totalncloc = totalncloc + biggerncloc
+        #printing the biggest branch of the project along with its ncloc
+        print(project.getkey(), biggerbranch, biggerncloc)
+        totalncloc = totalncloc + biggerncloc
+    except Exception as e:
+        pass
 
 print("Total nuumber of lines of code in your SonarQube instance:", totalncloc)
 
