@@ -120,5 +120,5 @@ for project in projects:
     except Exception as e:
         pass
 
-print("Total nuumber of lines of code in your SonarQube instance:", totalncloc)
+print("Total number of lines of code in your SonarQube instance:", totalncloc)
 
