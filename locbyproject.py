@@ -99,7 +99,7 @@ for project in projects:
     try:
         for branch in project.getbranches():
             try:
-                ncloc = requests.get(SQ_URL+NCLOC_API+'?component='+project.getkey()+'&branch='+branch.getname()+'&metricKeys=ncloc', auth=AUTH)
+                rc = requests.get(SQ_URL+NCLOC_API+'?component='+project.getkey()+'&branch='+branch.getname()+'&metricKeys=ncloc', auth=AUTH)
                 if rc.status_code == 200:
                     measures_list = rc.json()['component']['measures']
                     if len(measures_list) == 1:
